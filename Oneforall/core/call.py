@@ -598,17 +598,13 @@ class Call(PyTgCalls):
 
     async def decorators(self):
         # ✅ All of these lines must be indented under the function
-        @self.one.on_closed_voice_chat()
-        @self.two.on_closed_voice_chat()
-        @self.three.on_closed_voice_chat()
-        @self.four.on_closed_voice_chat()
-        @self.five.on_closed_voice_chat()
-        @self.one.on_participant_left()
-        @self.two.on_participant_left()
-        @self.three.on_participant_left()
-        @self.four.on_participant_left()
-        @self.five.on_participant_left()
-        async def stream_services_handler(_, chat_id: int):
+    @self.one.on_participant_left()
+@self.two.on_participant_left()
+@self.three.on_participant_left()
+@self.four.on_participant_left()
+@self.five.on_participant_left()
+async def stream_services_handler(_, chat_id: int):
+
             await self.stop_stream(chat_id)
 
         @self.one.on_stream_end()
