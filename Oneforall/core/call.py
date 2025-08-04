@@ -594,47 +594,31 @@ class Call(PyTgCalls):
         if config.STRING5:
             await self.five.start()
 
+    
+
     async def decorators(self):
-    # ✅ Voice Chat Closed Handlers
-    @self.one.on_closed_voice_chat()
-    @self.two.on_closed_voice_chat()
-    @self.three.on_closed_voice_chat()
-    @self.four.on_closed_voice_chat()
-    @self.five.on_closed_voice_chat()
-    # ✅ Participant Left Handlers
-    @self.one.on_participant_left()
-    @self.two.on_participant_left()
-    @self.three.on_participant_left()
-    @self.four.on_participant_left()
-    @self.five.on_participant_left()
-    async def stream_services_handler(_, chat_id: int):
-        await self.stop_stream(chat_id)
+        # ✅ All of these lines must be indented under the function
+        @self.one.on_closed_voice_chat()
+        @self.two.on_closed_voice_chat()
+        @self.three.on_closed_voice_chat()
+        @self.four.on_closed_voice_chat()
+        @self.five.on_closed_voice_chat()
+        @self.one.on_participant_left()
+        @self.two.on_participant_left()
+        @self.three.on_participant_left()
+        @self.four.on_participant_left()
+        @self.five.on_participant_left()
+        async def stream_services_handler(_, chat_id: int):
+            await self.stop_stream(chat_id)
 
-    # ✅ Stream End Handlers (Separate for each client)
-    @self.one.on_stream_end()
-    async def stream_end_handler_one(client, update: Update):
-        await self._handle_stream_end(client, update)
-
-    @self.two.on_stream_end()
-    async def stream_end_handler_two(client, update: Update):
-        await self._handle_stream_end(client, update)
-
-    @self.three.on_stream_end()
-    async def stream_end_handler_three(client, update: Update):
-        await self._handle_stream_end(client, update)
-
-    @self.four.on_stream_end()
-    async def stream_end_handler_four(client, update: Update):
-        await self._handle_stream_end(client, update)
-
-    @self.five.on_stream_end()
-    async def stream_end_handler_five(client, update: Update):
-        await self._handle_stream_end(client, update)
-
-# 👇 Place this somewhere in the same class
-async def _handle_stream_end(self, client, update: Update):
-    if not isinstance(update, Update):
-        return
-    await self.change_stream(client, update.chat_id)
+        @self.one.on_stream_end()
+        @self.two.on_stream_end()
+        @self.three.on_stream_end()
+        @self.four.on_stream_end()
+        @self.five.on_stream_end()
+        async def stream_end_handler(client, update):
+            if not isinstance(update, Update):
+                return
+            await self.change_stream(client, update.chat_id)
 
 Hotty = Call()
