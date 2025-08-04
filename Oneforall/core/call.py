@@ -9,7 +9,7 @@ from pyrogram.types import InlineKeyboardMarkup
 from pytgcalls import PyTgCalls
 #from pytgcalls.exceptions import AlreadyJoinedError, NoActiveGroupCall
 from pytgcalls.types import AudioQuality, MediaStream, Update, VideoQuality
-from pytgcalls.types.stream import StreamAudioEnded
+#from pytgcalls.types.stream import StreamAudioEnded
 
 import config
 from Oneforall import LOGGER, YouTube, app
