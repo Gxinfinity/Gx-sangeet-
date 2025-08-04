@@ -569,6 +569,7 @@ class Call(PyTgCalls):
 
     class Call:
     def __init__(self):
+        # Assign PyTgCalls clients here
         self.one = None
         self.two = None
         self.three = None
@@ -576,9 +577,11 @@ class Call(PyTgCalls):
         self.five = None
 
     async def stop_stream(self, chat_id):
+        # Your logic for stopping stream
         pass
 
     async def change_stream(self, client, chat_id):
+        # Your logic for changing stream
         pass
 
     async def decorators(self):
@@ -626,6 +629,7 @@ class Call(PyTgCalls):
             await self.four.start()
         if config.STRING5:
             await self.five.start()
+
 
 # ✅ Object create karo class ke baad
 Hotty = Call()
