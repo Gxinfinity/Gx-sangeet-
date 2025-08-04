@@ -9,7 +9,7 @@ from pyrogram.types import InlineKeyboardMarkup
 from pytgcalls import PyTgCalls
 #from pytgcalls.exceptions import AlreadyJoinedError, NoActiveGroupCall
 from pytgcalls.types import AudioQuality, MediaStream, Update, VideoQuality
-#from pytgcalls.types.stream import StreamAudioEnded
+from pytgcalls.types import Update
 
 import config
 from Oneforall import LOGGER, YouTube, app
@@ -619,7 +619,7 @@ class Call(PyTgCalls):
         @self.four.on_stream_end()
         @self.five.on_stream_end()
         async def stream_end_handler(client, update: Update):
-            if not isinstance(update, StreamAudioEnded):
+            if not isinstance(update, Update):
                 return
             await self.change_stream(client, update.chat_id)
 
