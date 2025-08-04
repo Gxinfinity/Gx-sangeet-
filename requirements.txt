@@ -15,9 +15,9 @@ qrcode
 future==0.18.3
 search_engine_parser
 speedtest
-PyTgCalls v1.2.9
+py-tgcalls==2.2.5
+ntgcalls==2.0.5
 MukeshAPI
-ntgcalls==1.1.2
 gitpython
 pykeyboard
 python-dotenv
@@ -34,8 +34,6 @@ youtube_search
 youtube-search-python
 googlesearch-python
 unidecode
-#git+https://github.com/joetats/youtube_search@master
-#git+https://github.com/alexmercerind/youtube-search-python@main
 https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.23.zip
 git+https://github.com/AsmSafone/SafoneAPI
 bing_image_downloader
