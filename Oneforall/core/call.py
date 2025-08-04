@@ -610,7 +610,7 @@ class Call(PyTgCalls):
     async def stream_services_handler(_, chat_id: int):
         await self.stop_stream(chat_id)
 
-    # ✅ Stream End Handlers (MUST BE SEPARATE FUNCTION)
+    # ✅ Stream End Handlers (Separate for each client)
     @self.one.on_stream_end()
     async def stream_end_handler_one(client, update: Update):
         await self._handle_stream_end(client, update)
@@ -631,7 +631,7 @@ class Call(PyTgCalls):
     async def stream_end_handler_five(client, update: Update):
         await self._handle_stream_end(client, update)
 
-# Helper function for reuse
+# 👇 Place this somewhere in the same class
 async def _handle_stream_end(self, client, update: Update):
     if not isinstance(update, Update):
         return
