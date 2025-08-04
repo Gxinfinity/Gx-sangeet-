@@ -567,6 +567,39 @@ class Call(PyTgCalls):
                     db[chat_id][0]["mystic"] = run
                     db[chat_id][0]["markup"] = "stream"
 
+    class Call:
+    def __init__(self):
+        self.one = None
+        self.two = None
+        self.three = None
+        self.four = None
+        self.five = None
+
+    async def stop_stream(self, chat_id):
+        pass
+
+    async def change_stream(self, client, chat_id):
+        pass
+
+    async def decorators(self):
+        @self.one.on_participant_left()
+        @self.two.on_participant_left()
+        @self.three.on_participant_left()
+        @self.four.on_participant_left()
+        @self.five.on_participant_left()
+        async def stream_services_handler(_, chat_id: int):
+            await self.stop_stream(chat_id)
+
+        @self.one.on_stream_end()
+        @self.two.on_stream_end()
+        @self.three.on_stream_end()
+        @self.four.on_stream_end()
+        @self.five.on_stream_end()
+        async def stream_end_handler(client, update):
+            if not isinstance(update, Update):
+                return
+            await self.change_stream(client, update.chat_id)
+
     async def ping(self):
         pings = []
         if config.STRING1:
@@ -594,27 +627,5 @@ class Call(PyTgCalls):
         if config.STRING5:
             await self.five.start()
 
-    
-
-    async def decorators(self):
-        # ✅ All of these lines must be indented under the function
-    @self.one.on_participant_left()
-@self.two.on_participant_left()
-@self.three.on_participant_left()
-@self.four.on_participant_left()
-@self.five.on_participant_left()
-async def stream_services_handler(_, chat_id: int):
-
-            await self.stop_stream(chat_id)
-
-        @self.one.on_stream_end()
-        @self.two.on_stream_end()
-        @self.three.on_stream_end()
-        @self.four.on_stream_end()
-        @self.five.on_stream_end()
-        async def stream_end_handler(client, update):
-            if not isinstance(update, Update):
-                return
-            await self.change_stream(client, update.chat_id)
-
+# ✅ Object create karo class ke baad
 Hotty = Call()
