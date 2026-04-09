@@ -1,6 +1,5 @@
 import asyncio
 from datetime import datetime
-
 from pyrogram.enums import ChatType
 
 import config
@@ -9,66 +8,108 @@ from Oneforall.core.call import Hotty, autoend
 from Oneforall.utils.database import get_client, is_active_chat, is_autoend
 
 
+# ================== AUTO LEAVE ==================
 async def auto_leave():
-    if config.AUTO_LEAVING_ASSISTANT:
-        while not await asyncio.sleep(900):
+    await asyncio.sleep(15)
+
+    while True:
+        try:
+            await asyncio.sleep(900)
+
+            # 🔥 HARD GLOBAL CHECK
+            if not config.AUTO_LEAVING_ASSISTANT:
+                continue
+
             from Oneforall.core.userbot import assistants
 
             for num in assistants:
                 client = await get_client(num)
                 left = 0
-                try:
-                    async for i in client.get_dialogs():
-                        if i.chat.type in [
-                            ChatType.SUPERGROUP,
-                            ChatType.GROUP,
-                            ChatType.CHANNEL,
-                        ]:
-                            if (
-                                i.chat.id != config.LOGGER_ID
-                                and i.chat.id != -1001626004802
-                                and i.chat.id != -1001876397776
-                            ):
-                                if left == 20:
-                                    continue
-                                if not await is_active_chat(i.chat.id):
-                                    try:
-                                        await client.leave_chat(i.chat.id)
-                                        left += 1
-                                    except:
-                                        continue
-                except:
-                    pass
+
+                async for i in client.get_dialogs():
+                    chat = i.chat
+
+                    if chat.type not in [
+                        ChatType.SUPERGROUP,
+                        ChatType.GROUP,
+                        ChatType.CHANNEL,
+                    ]:
+                        continue
+
+                    if chat.id in [
+                        config.LOGGER_ID,
+                        -1001626004802,
+                        -1001876397776,
+                    ]:
+                        continue
+
+                    if left >= 20:
+                        break
+
+                    # 🔥 SAFE CHECK
+                    try:
+                        active = await is_active_chat(chat.id)
+                    except:
+                        active = True  # safety
+
+                    # ❌ inactive hone pe bhi leave mat kar (safe mode)
+                    if not active:
+                        continue
+
+                    try:
+                        await client.leave_chat(chat.id)
+                        left += 1
+                        await asyncio.sleep(1)
+                    except:
+                        continue
+
+        except Exception as e:
+            print(f"[AUTO_LEAVE ERROR]: {e}")
 
 
-asyncio.create_task(auto_leave())
-
-
+# ================== AUTO END ==================
 async def auto_end():
-    while not await asyncio.sleep(5):
-        ender = await is_autoend()
-        if not ender:
-            continue
-        for chat_id in autoend:
-            timer = autoend.get(chat_id)
-            if not timer:
+    await asyncio.sleep(15)
+
+    while True:
+        try:
+            await asyncio.sleep(5)
+
+            if not await is_autoend():
                 continue
-            if datetime.now() > timer:
-                if not await is_active_chat(chat_id):
+
+            for chat_id in list(autoend.keys()):
+                timer = autoend.get(chat_id)
+
+                if not timer:
+                    continue
+
+                if datetime.now() > timer:
                     autoend[chat_id] = {}
-                    continue
-                autoend[chat_id] = {}
-                try:
-                    await Hotty.stop_stream(chat_id)
-                except:
-                    continue
-                try:
-                    await app.send_message(
-                        chat_id,
-                        "» ʙᴏᴛ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ʟᴇғᴛ ᴠɪᴅᴇᴏᴄʜᴀᴛ ʙᴇᴄᴀᴜsᴇ ɴᴏ ᴏɴᴇ ᴡᴀs ʟɪsᴛᴇɴɪɴɢ ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ.",
-                    )
-                except:
-                    continue
+
+                    try:
+                        if await is_active_chat(chat_id):
+                            await Hotty.stop_stream(chat_id)
+                    except:
+                        pass
+
+                    try:
+                        await app.send_message(
+                            chat_id,
+                            "» ʙᴏᴛ ᴀᴜᴛᴏ ʟᴇғᴛ ᴠᴄ ʙᴇᴄᴀᴜsᴇ ɴᴏ ʟɪsᴛᴇɴᴇʀs.",
+                        )
+                    except:
+                        pass
+
+        except Exception as e:
+            print(f"[AUTO_END ERROR]: {e}")
 
 
-asyncio.create_task(auto_end())
+# 🔥 SAFE START (delay ke baad)
+async def start_tasks():
+    await asyncio.sleep(20)
+    asyncio.create_task(auto_leave())
+    asyncio.create_task(auto_end())
+
+
+asyncio.get_event_loop().create_task(start_tasks())
